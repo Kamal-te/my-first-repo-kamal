@@ -123,6 +123,7 @@ main{padding:22px 18px 70px;max-width:1560px;margin:0 auto;width:100%}
 .card .sub{color:var(--mut);font-size:12px;margin-bottom:14px}
 .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
 .grid{display:grid;gap:14px}
+.grid>*{min-width:0}
 .g2{grid-template-columns:repeat(2,minmax(0,1fr))}
 .g3{grid-template-columns:repeat(3,minmax(0,1fr))}
 .g4{grid-template-columns:repeat(4,minmax(0,1fr))}
@@ -154,9 +155,10 @@ button.btn.gs:hover{color:var(--ink);background:rgba(255,255,255,.07);box-shadow
 label.f{display:block}
 label.f>span{display:block;font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--mut);margin-bottom:6px;font-weight:600}
 label.f>span i{color:var(--bad);font-style:normal}
-input[type=text],input[type=password],input[type=number],input[type=date],input[type=search],select,textarea{
+input[type=text],input[type=password],input[type=email],input[type=number],input[type=date],input[type=search],select,textarea{
   width:100%;background:rgba(3,6,14,.72);border:1px solid var(--line2);border-radius:11px;padding:9px 12px;outline:none;transition:border-color .2s,box-shadow .2s,background .2s
 }
+input:disabled,select:disabled{opacity:.55;cursor:not-allowed}
 input:focus,select:focus,textarea:focus{border-color:var(--acc);box-shadow:0 0 0 4px rgba(34,211,238,.14),0 0 22px -6px rgba(34,211,238,.6);background:rgba(3,6,14,.95)}
 input::placeholder,textarea::placeholder{color:#55668f}
 select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--acc) 50%),linear-gradient(135deg,var(--acc) 50%,transparent 50%);
@@ -407,10 +409,10 @@ input[type=checkbox]{width:15px;height:15px;accent-color:var(--acc);cursor:point
 .report .sign{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:34px}
 .report .sign div{border-top:1px solid #0b0b0b;padding-top:5px;font-size:11px;color:#374151}
 .loglist{display:flex;flex-direction:column;gap:6px;max-height:330px;overflow:auto}
-.logrow{display:grid;grid-template-columns:132px 92px 1fr;gap:10px;font-size:12.3px;padding:7px 9px;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.03);transition:border-color .2s}
+.logrow{display:grid;grid-template-columns:128px minmax(0,auto) minmax(0,1fr);gap:10px;font-size:12.3px;padding:7px 9px;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.03);transition:border-color .2s}
 .logrow:hover{border-color:var(--line2)}
 .logrow .t{color:var(--mut);font-family:var(--mono);font-size:11px}
-.logrow .u{color:var(--acc)}
+.logrow .u{color:var(--acc);overflow-wrap:anywhere}
 .kbd{font-family:var(--mono);font-size:11px;background:rgba(255,255,255,.07);border:1px solid var(--line2);border-radius:6px;padding:1px 6px}
 .scan{position:relative;flex:0 0 300px;max-width:300px}
 @media(max-width:900px){.scan{flex:1 1 100%;max-width:none}}
@@ -449,20 +451,24 @@ input[type=checkbox]{width:15px;height:15px;accent-color:var(--acc);cursor:point
       <div class="feat"><span class="k" data-ic="list" data-ic-size="13"></span><span><b>Single source of truth</b> for composition, GSM, width, shade, lot and supplier — with a full change history.</span></div>
       <div class="feat"><span class="k" data-ic="refresh" data-ic-size="13"></span><span><b>Excel / CSV import</b> with column mapping, duplicate detection and a downloadable error report.</span></div>
       <div class="feat"><span class="k" data-ic="print" data-ic-size="13"></span><span><b>True-to-scale label printing</b> — 50×25 mm thermal rolls, 60×40 mm swatch labels, or a cut-out A4 sheet.</span></div>
-      <div class="feat"><span class="k" data-ic="lock" data-ic-size="13"></span><span><b>Admin &amp; viewer roles</b> — only admins edit, approve and manage users; viewers read, print and export.</span></div>
+      <div class="feat"><span class="k" data-ic="lock" data-ic-size="13"></span><span><b>Email approval</b> — only addresses an administrator approves can sign in. Admin, editor and viewer roles.</span></div>
     </div>
     <div class="login-form">
       <div>
-        <h2 style="font-size:19px">Sign in</h2>
-        <div class="mut tiny">Access is limited to registered users of this workstation.</div>
+        <h2 id="lgTitle" style="font-size:19px">Sign in</h2>
+        <div class="mut tiny" id="lgSub">Use the email your administrator approved.</div>
       </div>
-      <label class="f"><span>Username</span><input id="lgUser" type="text" autocomplete="username" placeholder="admin" autofocus></label>
-      <label class="f"><span>Password</span><input id="lgPass" type="password" autocomplete="current-password" placeholder="••••••••"></label>
+      <label class="f hide" id="lgNameRow"><span>Your full name</span><input id="lgName" type="text" autocomplete="name" placeholder="Full name"></label>
+      <label class="f hide" id="lgOldRow"><span>Current username</span><input id="lgOldUser" type="text" autocomplete="username" placeholder="admin"></label>
+      <label class="f" id="lgEmailRow"><span>Email</span><input id="lgUser" type="email" autocomplete="email" placeholder="you@company.com" autofocus></label>
+      <label class="f" id="lgPassRow"><span>Password</span><input id="lgPass" type="password" autocomplete="current-password" placeholder="••••••••"></label>
+      <label class="f hide" id="lgNewRow"><span>New password (min 8 characters)</span><input id="lgNew" type="password" autocomplete="new-password"></label>
+      <label class="f hide" id="lgNew2Row"><span>Confirm new password</span><input id="lgNew2" type="password" autocomplete="new-password"></label>
       <div id="lgErr" class="warnbox hide"></div>
       <button class="btn pri" id="lgBtn" style="justify-content:center;padding:11px">Sign in</button>
-      <div class="cred-hint">
-        Demo logins — <code>admin / admin123</code> (full control) · <code>editor / editor123</code> (data entry) · <code>viewer / view123</code> (read only).<br>
-        Change these on the <b>Users</b> tab before real use.
+      <button class="btn gs hide" id="lgBack" style="justify-content:center">← Back to sign in</button>
+      <div class="cred-hint" id="lgHint">
+        Only emails an administrator has approved can sign in. Not on the list? Ask your administrator to add your email under <b>Users</b>.
       </div>
     </div>
   </div>
@@ -479,6 +485,7 @@ input[type=checkbox]{width:15px;height:15px;accent-color:var(--acc);cursor:point
     <div class="who">
       <div class="av" id="whoAv">A</div>
       <div><b id="whoName">—</b><small id="whoRole">—</small></div>
+      <button class="btn sm gs" id="btnPw" title="Change my password"><i data-ic="lock" data-ic-size="14"></i></button>
       <button class="btn sm gs" id="btnLogout" title="Sign out"><i data-ic="x" data-ic-size="14"></i></button>
     </div>
   </header>
@@ -737,8 +744,8 @@ input[type=checkbox]{width:15px;height:15px;accent-color:var(--acc);cursor:point
     <!-- LABELS PREVIEW SHEET -->
     <section class="view" id="v-users">
       <div class="row" style="justify-content:space-between;margin-bottom:14px">
-        <div><h2 style="font-size:20px">Users &amp; access</h2><div class="mut tiny">Admin manages everything and approves specs. Editor enters data. Viewer reads, prints and exports only.</div></div>
-        <button class="btn sm pri" id="btnNewUser"><i data-ic="plus"></i>Add user</button>
+        <div><h2 style="font-size:20px">Users &amp; access</h2><div class="mut tiny">Admin approves emails and manages everything. Editor enters data. Viewer reads, prints and exports only.</div></div>
+        <button class="btn sm pri" id="btnNewUser"><i data-ic="plus"></i>Approve email</button>
       </div>
       <div class="grid g23">
         <div class="card">
@@ -963,22 +970,95 @@ async function sha256(txt){
   let h=5381; for(let i=0;i<txt.length;i++) h=((h<<5)+h+txt.charCodeAt(i))>>>0; /* file:// fallback */
   return 'fb'+h.toString(16)+txt.length.toString(16);
 }
-async function hashPw(pw,salt){ return sha256(salt+'::'+pw+'::fabriclabelprinter'); }
-function newUser(name,username,pw,role,name2){
-  return { id:uid(), name:name||username, username:username.toLowerCase(), role:role||'viewer',
-           salt:uid(), active:1, created:new Date().toISOString(), pwHash:null, seed:pw };
+/* ---------------- accounts: email sign-in, admin approval, PBKDF2 passwords ---------------- */
+const KDF_TAG = 'pbkdf2-sha256-210000';
+const SESSION_HOURS = 12, MAX_TRIES = 5, LOCK_MINUTES = 5, MIN_PW = 8;
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+const normEmail = s => String(s==null?'':s).trim().toLowerCase();
+const ROLE_LABEL={admin:'Administrator',editor:'Editor — data entry',viewer:'Viewer — read only'};
+const ROLE_OPTS=[['viewer','Viewer — read, print, export'],['editor','Editor — data entry'],['admin','Administrator — full control']];
+const roleOptions = sel => ROLE_OPTS.map(([v,l])=>'<option value="'+v+'"'+(v===sel?' selected':'')+'>'+l+'</option>').join('');
+const randHex = n => { const a=new Uint8Array(n); crypto.getRandomValues(a); return [...a].map(b=>b.toString(16).padStart(2,'0')).join(''); };
+async function pbkdf2(pw,salt){
+  const enc=new TextEncoder();
+  const key=await crypto.subtle.importKey('raw',enc.encode(pw),'PBKDF2',false,['deriveBits']);
+  const bits=await crypto.subtle.deriveBits({name:'PBKDF2',hash:'SHA-256',salt:enc.encode(salt),iterations:210000},key,256);
+  return [...new Uint8Array(bits)].map(b=>b.toString(16).padStart(2,'0')).join('');
 }
-async function makeUser(name,username,pw,role){
-  const u={ id:uid(), name, username:username.toLowerCase(), role, salt:uid(), active:1, created:new Date().toISOString() };
-  u.pwHash = await hashPw(pw,u.salt);
+function newAccount(name,email,role){
+  return { id:uid(), name:name||email.split('@')[0], username:email, email, role, active:1, created:new Date().toISOString(),
+           pwHash:null, salt:null, kdf:null, mustChange:false, failN:0, lockUntil:0 };
+}
+async function setPassword(u,pw){
+  u.salt=randHex(16); u.kdf=KDF_TAG; u.pwHash=await pbkdf2(pw,u.salt); u.failN=0; u.lockUntil=0;
+}
+async function checkPassword(u,pw){
+  if(u.kdf===KDF_TAG) return (await pbkdf2(pw,u.salt))===u.pwHash;
+  /* accounts from older builds used salted SHA-256: accept once, then upgrade to PBKDF2 */
+  for(const tag of ['fabriclabelprinter','fabricspec']){
+    if((await sha256(u.salt+'::'+pw+'::'+tag))===u.pwHash){ await setPassword(u,pw); writeLS(LS.users,USERS); return true; }
+  }
+  return false;
+}
+function checkNewPassword(a,b){
+  if(String(a).length<MIN_PW) return 'Use at least '+MIN_PW+' characters.';
+  if(a!==b) return 'The two passwords do not match.';
+  return '';
+}
+const userByEmail = e => { const x=normEmail(e); return x? USERS.find(u=>u.email===x) : undefined; };
+const activeAdmins = exceptId => USERS.filter(u=>u.role==='admin' && u.active && u.email && u.id!==exceptId).length;
+function accountStatus(u){
+  if(!u.active) return ['Disabled','b-draft'];
+  if(!u.email) return ['Needs email','b-hold'];
+  if(u.lockUntil && u.lockUntil>Date.now()) return ['Locked','b-rejected'];
+  if(!u.pwHash) return ['Awaiting first sign-in','b-submitted'];
+  if(u.mustChange) return ['Must change password','b-hold'];
+  return ['Active','b-approved'];
+}
+/* accounts saved by older builds have a username but no email; keep them, flagged "Needs email" */
+function normalizeAccount(u){
+  if(!u.email && String(u.username||'').includes('@')) u.email=normEmail(u.username);
+  if(u.email){ u.email=normEmail(u.email); u.username=u.email; }
+  u.failN=u.failN||0; u.lockUntil=u.lockUntil||0; u.mustChange=!!u.mustChange;
+}
+/* which sign-in screen to show before anyone is signed in */
+function chooseLoginMode(){
+  if(!USERS.length) return 'setup';
+  if(!activeAdmins() && USERS.some(u=>!u.email)) return 'migrate';
+  return 'signin';
+}
+function signIn(u){
+  SESS={ username:u.username, name:u.name, role:u.role, at:new Date().toISOString() };
+  writeLS(LS.sess,SESS); log('auth','Signed in');
   return u;
 }
-async function seedUsers(){
-  return [
-    await makeUser('System Admin','admin','admin123','admin'),
-    await makeUser('Data Entry','editor','editor123','editor'),
-    await makeUser('Floor Viewer','viewer','view123','viewer')
-  ];
+/* a saved session only counts while the account is still approved, active and fresh (12 h) */
+function resumeSession(){
+  if(!SESS) return false;
+  const u=userByEmail(SESS.username);
+  const fresh=Date.now()-Date.parse(SESS.at) < SESSION_HOURS*36e5;
+  if(!u || !u.active || !u.pwHash || u.mustChange || !fresh){ SESS=null; localStorage.removeItem(LS.sess); return false; }
+  SESS.role=u.role; SESS.name=u.name; writeLS(LS.sess,SESS);
+  return true;
+}
+/* returns {ok:true,user} to enter, {ok:true,next:'first'|'change',user} to set a password first, or {ok:false,msg} */
+async function doLogin(identifier,password){
+  const email=normEmail(identifier);
+  if(!EMAIL_RE.test(email)) return {ok:false,msg:'Enter the email address your administrator approved.'};
+  const u=userByEmail(email);
+  if(!u){ log('auth','Sign-in refused, email not approved: '+email); return {ok:false,msg:'This email is not approved for this workstation. Ask an administrator to add it under Users.'}; }
+  if(!u.active){ log('auth','Sign-in refused, disabled: '+email); return {ok:false,msg:'This account is disabled. Ask an administrator.'}; }
+  if(u.lockUntil && Date.now()<u.lockUntil) return {ok:false,msg:'Too many wrong attempts. Try again in '+Math.ceil((u.lockUntil-Date.now())/6e4)+' min.'};
+  if(!u.pwHash) return {ok:true,next:'first',user:u};          /* approved, no password yet */
+  if(!(await checkPassword(u,password))){
+    u.failN=(u.failN||0)+1;
+    if(u.failN>=MAX_TRIES){ u.lockUntil=Date.now()+LOCK_MINUTES*6e4; u.failN=0; }
+    writeLS(LS.users,USERS); log('auth','Wrong password for '+email+(u.lockUntil? ' — locked' : ''));
+    return {ok:false,msg: u.lockUntil? 'Too many wrong attempts. Locked for '+LOCK_MINUTES+' min.' : 'Wrong password. Try again, or ask an administrator to reset it.'};
+  }
+  u.failN=0; u.lockUntil=0; writeLS(LS.users,USERS);
+  if(u.mustChange) return {ok:true,next:'change',user:u};    /* temporary password: must replace it first */
+  signIn(u); return {ok:true,user:u};
 }
 function can(what){
   const r = SESS? SESS.role : 'viewer';
@@ -987,25 +1067,6 @@ function can(what){
   if(what==='approve') return false;
   if(what==='users'||what==='wipe'||what==='restore'||what==='settings') return false;
   return true; /* view, print, export */
-}
-const ROLE_LABEL={admin:'Administrator',editor:'Editor — data entry',viewer:'Viewer — read only'};
-function userByUname(u){ return USERS.find(x=>x.username===String(u||'').toLowerCase()); }
-
-async function doLogin(username,password){
-  const u=userByUname(username);
-  if(!u) return {ok:false,msg:'No such username on this workstation.'};
-  if(!u.active) return {ok:false,msg:'That account is deactivated. Ask an administrator.'};
-  let h=await hashPw(password,u.salt);
-  if(h!==u.pwHash){
-    /* tolerate accounts created before the app was renamed (previous salt) */
-    const legacy=await sha256(u.salt+'::'+password+'::fabricspec');
-    if(legacy!==u.pwHash) return {ok:false,msg:'Wrong password. Try again, or ask an admin to reset it.'};
-    u.pwHash=h; writeLS(LS.users,USERS);
-  }
-  SESS={ username:u.username, name:u.name, role:u.role, at:new Date().toISOString() };
-  writeLS(LS.sess,SESS);
-  log('auth','Signed in');
-  return {ok:true,user:u};
 }
 function logout(){ log('auth','Signed out'); SESS=null; localStorage.removeItem(LS.sess); location.reload(); }
 
@@ -1062,12 +1123,13 @@ function seedSpecs(){
 }
 
 async function bootData(){
-  if(!USERS || !USERS.length){ USERS = await seedUsers(); writeLS(LS.users,USERS); }
+  if(!Array.isArray(USERS)) USERS=[];            /* no accounts yet: the sign-in screen asks for the first administrator */
+  for(const u of USERS){
+    if(!u.pwHash && u.seed){ await setPassword(u,u.seed); delete u.seed; }
+    normalizeAccount(u);
+  }
+  writeLS(LS.users,USERS);
   if(!SPECS || !SPECS.length){ SPECS = seedSpecs(); writeLS(LS.specs,SPECS); writeLS(LS.seq,SPECS.length); }
-  /* recover plaintext seed passwords for accounts that predate hashing */
-  let changed=false;
-  for(const u of USERS){ if(!u.pwHash && u.seed){ u.salt=u.salt||uid(); u.pwHash=await hashPw(u.seed,u.salt); delete u.seed; changed=true; } }
-  if(changed) writeLS(LS.users,USERS);
 }
 
 /* ---------------- icon set (inline SVG, no emoji dependency) ---------------- */
@@ -1080,6 +1142,7 @@ const ICONS = {
   lock:'<rect x="4.5" y="10.5" width="15" height="10" rx="2.5"/><path d="M8 10.5V8a4 4 0 018 0v2.5"/>',
   gear:'<circle cx="12" cy="12" r="3.2"/><path d="M12 3v2.2M12 18.8V21M4.2 7.6l1.9 1.1M17.9 15.3l1.9 1.1M4.2 16.4l1.9-1.1M17.9 8.7l1.9-1.1"/>',
   eye:'<path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="2.6"/>',
+  mail:'<rect x="3.5" y="5.5" width="17" height="13" rx="2.5"/><path d="M4.5 7l7.5 6 7.5-6"/>',
   pencil:'<path d="M4 20h4l10-10-4-4L4 16z"/><path d="M13.5 6.5l4 4"/>',
   print:'<path d="M7 9V3h10v6M7 19H5a2 2 0 01-2-2v-5h18v5a2 2 0 01-2 2h-2M7 15h10v6H7z"/>',
   down:'<path d="M12 3v12m0 0l-4.5-4.5M12 15l4.5-4.5M5 20h14"/>',
@@ -1529,47 +1592,118 @@ function confirmBox(title,sub,ok){
 function renderUsers(){
   if(!$('#userTbl')) return;
   const roleAv={admin:'a',editor:'e',viewer:'v'};
-  $('#userTbl').innerHTML='<thead><tr><th>User</th><th>Username</th><th>Role</th><th>Status</th><th>Created</th><th class="right">Actions</th></tr></thead><tbody>'
-    + USERS.map(u=>'<tr><td><div class="swatchline"><span class="av '+roleAv[u.role]+'" style="width:24px;height:24px">'+esc((u.name||u.username)[0].toUpperCase())+'</span><b>'+esc(u.name||u.username)+'</b></div></td>'
-      + '<td class="mono tiny">'+esc(u.username)+'</td><td>'+esc(ROLE_LABEL[u.role]||u.role)+'</td>'
-      + '<td><span class="badge '+(u.active?'b-approved':'b-draft')+'">'+(u.active?'Active':'Disabled')+'</span></td>'
-      + '<td class="tiny mut">'+fmtDate(u.created)+'</td>'
-      + '<td class="act"><button class="btn sm gs" data-u-role="'+u.id+'" title="Change role">'+icon('refresh',14)+'</button>'
-      + '<button class="btn sm gs" data-u-pw="'+u.id+'" title="Reset password">'+icon('lock',14)+'</button>'
-      + '<button class="btn sm gs" data-u-tog="'+u.id+'" title="Enable / disable">'+(u.active?icon('x',14):icon('check',14))+'</button>'
-      + (u.username===SESS.username? '':'<button class="btn sm gs" data-u-del="'+u.id+'" title="Delete">'+icon('x',14)+'</button>')+'</td></tr>').join('')
+  $('#userTbl').innerHTML='<thead><tr><th>Name</th><th>Email (sign-in)</th><th>Role</th><th>Status</th><th>Approved</th><th class="right">Actions</th></tr></thead><tbody>'
+    + USERS.map(u=>{
+      const st=accountStatus(u), self=u.username===SESS.username;
+      return '<tr><td><div class="swatchline"><span class="av '+roleAv[u.role]+'" style="width:24px;height:24px">'+esc((u.name||u.email||'?')[0].toUpperCase())+'</span><b>'+esc(u.name||'—')+'</b></div></td>'
+        + '<td class="mono tiny">'+(u.email? esc(u.email) : '<span class="mut">none (old username)</span>')+'</td>'
+        + '<td>'+esc(ROLE_LABEL[u.role]||u.role)+'</td>'
+        + '<td><span class="badge '+st[1]+'">'+st[0]+'</span></td>'
+        + '<td class="tiny mut">'+fmtDate(u.created)+'</td>'
+        + '<td class="act">'
+        + '<button class="btn sm gs" data-u-mail="'+u.id+'" title="Change email">'+icon('mail',14)+'</button>'
+        + '<button class="btn sm gs" data-u-role="'+u.id+'" title="Change role">'+icon('refresh',14)+'</button>'
+        + '<button class="btn sm gs" data-u-pw="'+u.id+'" title="Reset password">'+icon('lock',14)+'</button>'
+        + '<button class="btn sm gs" data-u-tog="'+u.id+'" title="'+(u.active?'Disable':'Enable')+'">'+(u.active?icon('x',14):icon('check',14))+'</button>'
+        + (self? '' : '<button class="btn sm gs" data-u-del="'+u.id+'" title="Delete">'+icon('x',14)+'</button>')+'</td></tr>';
+    }).join('')
     + '</tbody>';
-  $('#userTbl').onclick=async e=>{
-    const role=e.target.closest('[data-u-role]'), pw=e.target.closest('[data-u-pw]'), tog=e.target.closest('[data-u-tog]'), del=e.target.closest('[data-u-del]');
-    if(role){ const u=USERS.find(x=>x.id===role.dataset.uRole);
-      const order=['viewer','editor','admin']; const next=order[(order.indexOf(u.role)+1)%3];
+  $('#userTbl').onclick=e=>{
+    const b=e.target.closest('[data-u-mail],[data-u-role],[data-u-pw],[data-u-tog],[data-u-del]');
+    if(!b) return;
+    const id=b.dataset.uMail||b.dataset.uRole||b.dataset.uPw||b.dataset.uTog||b.dataset.uDel;
+    const u=USERS.find(x=>x.id===id); if(!u) return;
+    if(b.dataset.uMail) return openEditEmail(u);
+    if(b.dataset.uPw) return u.username===SESS.username? openChangePassword() : openResetPassword(u);
+    if(b.dataset.uRole){
+      const order=['viewer','editor','admin'], next=order[(order.indexOf(u.role)+1)%order.length];
       if(u.username===SESS.username && next!=='admin'){ toast('You cannot demote the account you are signed in with.','bad'); return; }
-      const apply=()=>{ u.role=next; writeLS(LS.users,USERS); log('users','Role of '+u.username+' → '+next); renderUsers(); toast(u.username+' is now '+ROLE_LABEL[next]+'.', next==='admin'?'warn':'ok'); };
-      if(next==='admin') confirmBox('Give '+u.username+' administrator rights?','Administrators can edit, approve, delete specs, import files and manage every user on this workstation.',apply);
+      if(u.role==='admin' && next!=='admin' && u.active && activeAdmins(u.id)===0){ toast('At least one active administrator must remain.','bad'); return; }
+      const apply=()=>{ u.role=next; writeLS(LS.users,USERS); log('users','Role of '+u.username+' → '+next); renderUsers(); toast(esc(u.username)+' is now '+ROLE_LABEL[next]+'.', next==='admin'?'warn':'ok'); };
+      if(next==='admin') confirmBox('Give '+esc(u.username)+' administrator rights?','Administrators can edit, approve, delete specs, import files and manage every user on this workstation.',apply);
       else apply();
-      return; }
-    if(pw){ const u=USERS.find(x=>x.id===pw.dataset.uPw);
-      modal({title:'Reset password — '+u.username, body:'<label class="f"><span>New password</span><input id="pwNew" type="text" value="'+esc(u.username)+'123"></label><div class="tiny mut" style="margin-top:7px">Share it with the user; they can ask you to change it again.</div>',
-        foot:'<button class="btn" data-close>Cancel</button><button class="btn pri" id="pwGo">Set password</button>'});
-      $('#pwGo').onclick=async ()=>{ u.salt=uid(); u.pwHash=await hashPw($('#pwNew').value,u.salt); writeLS(LS.users,USERS); log('users','Password reset for '+u.username); closeModal(); toast('Password updated.','ok'); }; return; }
-    if(tog){ const u=USERS.find(x=>x.id===tog.dataset.uTog); if(u.username===SESS.username){ toast('You cannot disable yourself.','bad'); return; }
-      u.active=u.active?0:1; writeLS(LS.users,USERS); log('users',(u.active?'Enabled ':'Disabled ')+u.username); renderUsers(); return; }
-    if(del){ const u=USERS.find(x=>x.id===del.dataset.uDel);
-      confirmBox('Delete user '+u.username+'?','Their audit history stays. They lose access immediately.',()=>{
-        USERS=USERS.filter(x=>x.id!==u.id); writeLS(LS.users,USERS); log('users','Deleted '+u.username); renderUsers(); toast('User deleted.','warn'); }); }
+      return;
+    }
+    if(b.dataset.uTog){
+      if(u.username===SESS.username){ toast('You cannot disable yourself.','bad'); return; }
+      if(u.active && u.role==='admin' && activeAdmins(u.id)===0){ toast('At least one active administrator must remain.','bad'); return; }
+      u.active=u.active?0:1; writeLS(LS.users,USERS); log('users',(u.active?'Enabled ':'Disabled ')+u.username); renderUsers(); return;
+    }
+    if(b.dataset.uDel){
+      if(u.active && u.role==='admin' && activeAdmins(u.id)===0){ toast('At least one active administrator must remain.','bad'); return; }
+      confirmBox('Delete '+esc(u.name||u.username)+'?','Their audit history stays. They lose access immediately.',()=>{
+        USERS=USERS.filter(x=>x.id!==u.id); writeLS(LS.users,USERS); log('users','Deleted '+u.username); renderUsers(); toast('User deleted.','warn'); });
+    }
   };
-  $('#btnNewUser').onclick=()=>{
-    modal({ title:'Add user', body:'<div class="fgrid"><label class="f"><span>Full name</span><input id="nuName" type="text" placeholder="Floor QC"></label>'
-      + '<label class="f"><span>Username</span><input id="nuUser" type="text" placeholder="qc1"></label>'
-      + '<label class="f"><span>Password</span><input id="nuPw" type="text" placeholder="choose123"></label>'
-      + '<label class="f"><span>Role</span><select id="nuRole"><option value="viewer">Viewer — read, print, export</option><option value="editor">Editor — data entry</option><option value="admin">Administrator — full control</option></select></label></div>',
-      foot:'<button class="btn" data-close>Cancel</button><button class="btn pri" id="nuGo">Create user</button>' });
-    $('#nuGo').onclick=async ()=>{
-      const nm=$('#nuName').value.trim(), un=$('#nuUser').value.trim().toLowerCase(), pw=$('#nuPw').value, rl=$('#nuRole').value;
-      if(!un||!pw){ toast('Username and password are required.','bad'); return; }
-      if(userByUname(un)){ toast('Username taken.','bad'); return; }
-      USERS.push(await makeUser(nm||un,un,pw,rl)); writeLS(LS.users,USERS); log('users','Created '+un+' as '+rl);
-      closeModal(); renderUsers(); toast('User '+esc(un)+' created.','ok'); };
+  $('#btnNewUser').onclick=openApprove;
+}
+/* admin approves an email: only that address can sign in afterwards */
+function openApprove(){
+  modal({ title:'Approve an email', sub:'Only approved emails can sign in to this workstation.',
+    body:'<div class="fgrid"><label class="f"><span>Full name</span><input id="apName" type="text" placeholder="Floor QC"></label>'
+      + '<label class="f"><span>Email (sign-in)</span><input id="apMail" type="email" placeholder="name@company.com"></label>'
+      + '<label class="f"><span>Role</span><select id="apRole">'+roleOptions('viewer')+'</select></label>'
+      + '<label class="f"><span>Temporary password (optional)</span><input id="apPw" type="text" placeholder="min '+MIN_PW+' characters"></label></div>'
+      + '<div class="tiny mut" style="margin-top:9px">Leave the password blank and they create their own on first sign-in. If you set one, share it privately; they must replace it on first sign-in.</div>',
+    foot:'<button class="btn" data-close>Cancel</button><button class="btn pri" id="apGo">Approve</button>' });
+  $('#apGo').onclick=async ()=>{
+    const name=$('#apName').value.trim(), email=normEmail($('#apMail').value), role=$('#apRole').value, pw=$('#apPw').value;
+    if(!EMAIL_RE.test(email)){ toast('Enter a valid email address.','bad'); return; }
+    if(userByEmail(email)){ toast('That email is already approved.','bad'); return; }
+    if(pw && pw.length<MIN_PW){ toast('Temporary password needs at least '+MIN_PW+' characters.','bad'); return; }
+    const u=newAccount(name,email,role);
+    if(pw){ await setPassword(u,pw); u.mustChange=true; }
+    USERS.push(u); writeLS(LS.users,USERS);
+    log('users','Approved '+email+' as '+role+(pw?' with a temporary password':' (creates own password)'));
+    closeModal(); renderUsers(); toast(esc(email)+' approved.','ok');
+  };
+}
+function openEditEmail(u){
+  modal({ title:'Change email — '+esc(u.name||u.username), sub:'They sign in with the new email. Their password stays the same.',
+    body:'<label class="f"><span>Email (sign-in)</span><input id="emNew" type="email" value="'+esc(u.email||'')+'"></label>',
+    foot:'<button class="btn" data-close>Cancel</button><button class="btn pri" id="emGo">Save email</button>' });
+  $('#emGo').onclick=()=>{
+    const e=normEmail($('#emNew').value);
+    if(!EMAIL_RE.test(e)){ toast('Enter a valid email address.','bad'); return; }
+    const other=userByEmail(e);
+    if(other && other!==u){ toast('That email belongs to another account.','bad'); return; }
+    const old=u.username; u.email=e; u.username=e;
+    if(SESS && SESS.username===old){ SESS.username=e; writeLS(LS.sess,SESS); }
+    writeLS(LS.users,USERS); log('users','Email for '+old+' → '+e);
+    closeModal(); renderUsers(); toast('Email saved.','ok');
+  };
+}
+/* admin resets someone else: a temporary password, or blank so they choose their own at next sign-in */
+function openResetPassword(u){
+  modal({ title:'Reset password — '+esc(u.name||u.username), sub:'Choose how they get back in.',
+    body:'<label class="f"><span>Temporary password (optional)</span><input id="rpPw" type="text" placeholder="min '+MIN_PW+' characters"></label>'
+      + '<div class="tiny mut" style="margin-top:9px">With a temporary password they must replace it at their next sign-in. Leave it blank and they create a new password the next time they sign in. Share a temporary password privately.</div>',
+    foot:'<button class="btn" data-close>Cancel</button><button class="btn pri" id="rpGo">Reset</button>' });
+  $('#rpGo').onclick=async ()=>{
+    const pw=$('#rpPw').value;
+    if(pw && pw.length<MIN_PW){ toast('Temporary password needs at least '+MIN_PW+' characters.','bad'); return; }
+    if(pw){ await setPassword(u,pw); u.mustChange=true; }
+    else { u.pwHash=null; u.salt=null; u.kdf=null; u.mustChange=false; u.failN=0; u.lockUntil=0; }
+    writeLS(LS.users,USERS); log('users','Password reset for '+u.username+(pw?' (temporary)':' (set at next sign-in)'));
+    closeModal(); renderUsers(); toast(pw? 'Temporary password set.' : 'They will create a new password at sign-in.','ok');
+  };
+}
+/* anyone can change their own password; the old one must be given first */
+function openChangePassword(){
+  modal({ title:'Change my password', sub:'Your old password stops working as soon as you save.',
+    body:'<div class="fgrid"><label class="f full"><span>Current password</span><input id="cpOld" type="password" autocomplete="current-password"></label>'
+      + '<label class="f"><span>New password</span><input id="cpNew" type="password" autocomplete="new-password"></label>'
+      + '<label class="f"><span>Confirm new password</span><input id="cpNew2" type="password" autocomplete="new-password"></label></div>'
+      + '<div class="tiny mut" style="margin-top:9px">At least '+MIN_PW+' characters.</div>',
+    foot:'<button class="btn" data-close>Cancel</button><button class="btn pri" id="cpGo">Update password</button>' });
+  $('#cpGo').onclick=async ()=>{
+    const u=userByEmail(SESS.username);
+    if(!u || !(await checkPassword(u,$('#cpOld').value))){ toast('Current password is wrong.','bad'); return; }
+    const err=checkNewPassword($('#cpNew').value,$('#cpNew2').value);
+    if(err){ toast(err,'bad'); return; }
+    if(await checkPassword(u,$('#cpNew').value)){ toast('Choose a password different from the current one.','bad'); return; }
+    await setPassword(u,$('#cpNew').value); u.mustChange=false; writeLS(LS.users,USERS);
+    log('users','Changed own password'); closeModal(); renderUsers(); toast('Password updated.','ok');
   };
 }
 function renderLog(){
@@ -2098,7 +2232,7 @@ async function restoreJson(file){
     if(!d.specs) throw new Error('No "specs" array in that file.');
     confirmBox('Restore backup?','This replaces all specs, settings, users and the queue ('+d.specs.length+' specs).',()=>{
       SPECS=d.specs||[]; if(d.settings) { SET=Object.assign({},DEFAULT_SETTINGS,d.settings); writeLS(LS.set,SET); }
-      if(d.users&&d.users.length){ USERS=d.users; writeLS(LS.users,USERS); }
+      if(d.users&&d.users.length){ USERS=d.users; USERS.forEach(normalizeAccount); writeLS(LS.users,USERS); }
       if(d.queue) { QUEUE=d.queue; writeLS(LS.queue,QUEUE); }
       LOG=(d.log||[]).concat(LOG).slice(0,1500); writeLS(LS.log,LOG);
       saveSpecs(); applyBrand(); fillSelects(); renderSpecs(); renderDash(); renderSettings(); renderUsers(); renderWa();
@@ -2195,17 +2329,95 @@ function renderWa(){
 }
 
 /* ---------------- init ---------------- */
-function wireLogin(){
-  $('#lgBtn').onclick=async ()=>{
+/* ---------------- sign-in screen: sign in, first password, first admin, legacy link ---------------- */
+let LOGIN_MODE='signin', PENDING=null;
+const LOGIN_TEXT={
+  signin:{t:'Sign in', s:'Use the email your administrator approved.', b:'Sign in'},
+  first:{t:'Create your password', s:'Your email is approved. Choose a password to finish setting up.', b:'Create password & sign in'},
+  change:{t:'Set a new password', s:'Your administrator gave you a temporary password. Choose your own to continue.', b:'Save & sign in'},
+  setup:{t:'Set up this workstation', s:'Create the first administrator. After this, only approved emails can sign in.', b:'Create administrator'},
+  migrate:{t:'Link your administrator', s:'This workstation now signs in with email. Confirm your current account, then enter the email to use.', b:'Link email'}
+};
+const LOGIN_HINT={
+  signin:'Only emails an administrator has approved can sign in. Not on the list? Ask your administrator to add your email under <b>Users</b>.',
+  setup:'This first account approves every other email. Use a strong password and store it safely.',
+  migrate:'Your password does not change. This step only ties the old username to its email.'
+};
+function setLoginMode(mode){
+  LOGIN_MODE=mode; const t=LOGIN_TEXT[mode];
+  const creating = mode==='first'||mode==='change';
+  $('#lgTitle').textContent=t.t; $('#lgSub').textContent=t.s; $('#lgBtn').textContent=t.b;
+  const rows={ lgNameRow:mode==='setup', lgOldRow:mode==='migrate', lgEmailRow:true, lgPassRow:mode==='signin'||mode==='migrate',
+    lgNewRow:creating||mode==='setup', lgNew2Row:creating||mode==='setup' };
+  Object.entries(rows).forEach(([id,on])=>$('#'+id).classList.toggle('hide',!on));
+  $('#lgBack').classList.toggle('hide',!creating);
+  $('#lgHint').classList.toggle('hide',!LOGIN_HINT[mode]);
+  if(LOGIN_HINT[mode]) $('#lgHint').innerHTML=LOGIN_HINT[mode];
+  $('#lgUser').disabled=creating;
+  if(creating && PENDING) $('#lgUser').value=PENDING.user.email;
+  ['lgName','lgOldUser','lgPass','lgNew','lgNew2'].forEach(id=>$('#'+id).value='');
+  clearLoginErr();
+  setTimeout(()=>{ $(mode==='setup'?'#lgName':mode==='migrate'?'#lgOldUser':creating?'#lgNew':'#lgUser').focus(); },0);
+}
+function showLoginErr(msg){ const e=$('#lgErr'); e.textContent=msg; e.classList.remove('hide'); }
+function clearLoginErr(){ $('#lgErr').classList.add('hide'); }
+async function submitLogin(){
+  clearLoginErr();
+  if(!(window.crypto && crypto.subtle)){ showLoginErr('This browser cannot hash passwords securely here. Open the app from the file on this computer, or over HTTPS.'); return; }
+  const btn=$('#lgBtn'); btn.disabled=true;
+  try{
+    if(LOGIN_MODE==='setup') return await doSetup();
+    if(LOGIN_MODE==='migrate') return await doMigrate();
+    if(LOGIN_MODE==='first'||LOGIN_MODE==='change') return await doSetPassword();
     const r=await doLogin($('#lgUser').value,$('#lgPass').value);
-    if(!r.ok){ const e=$('#lgErr'); e.classList.remove('hide'); e.textContent=r.msg; return; }
+    if(!r.ok){ showLoginErr(r.msg); $('#lgPass').value=''; return; }
+    if(r.next){ PENDING=r; setLoginMode(r.next); return; }
     startApp();
-  };
-  $('#lgPass').addEventListener('keydown',e=>{ if(e.key==='Enter') $('#lgBtn').click(); });
-  $('#lgUser').addEventListener('keydown',e=>{ if(e.key==='Enter') $('#lgBtn').click(); });
+  } finally { btn.disabled=false; }
+}
+async function doSetPassword(){
+  const u=PENDING && PENDING.user;
+  if(!u || !userByEmail(u.email)){ PENDING=null; setLoginMode('signin'); return; }
+  if(!u.active){ PENDING=null; setLoginMode('signin'); showLoginErr('This account was disabled. Ask an administrator.'); return; }
+  const err=checkNewPassword($('#lgNew').value,$('#lgNew2').value);
+  if(err){ showLoginErr(err); return; }
+  if(u.mustChange && await checkPassword(u,$('#lgNew').value)){ showLoginErr('Choose a password different from the temporary one.'); return; }
+  await setPassword(u,$('#lgNew').value); u.mustChange=false; writeLS(LS.users,USERS);
+  PENDING=null; signIn(u); startApp();
+}
+async function doSetup(){
+  if(USERS.length){ setLoginMode('signin'); return; }
+  const name=$('#lgName').value.trim(), email=normEmail($('#lgUser').value);
+  if(!name){ showLoginErr('Enter your full name.'); return; }
+  if(!EMAIL_RE.test(email)){ showLoginErr('Enter a valid email address.'); return; }
+  const err=checkNewPassword($('#lgNew').value,$('#lgNew2').value);
+  if(err){ showLoginErr(err); return; }
+  const u=newAccount(name,email,'admin');
+  await setPassword(u,$('#lgNew').value);
+  USERS=[u]; writeLS(LS.users,USERS); signIn(u); startApp();
+}
+/* old username-based accounts: tie one of them to an email. If no administrator exists any more, this one becomes one. */
+async function doMigrate(){
+  const oldName=$('#lgOldUser').value.trim().toLowerCase(), pw=$('#lgPass').value, email=normEmail($('#lgUser').value);
+  const u=USERS.find(x=>!x.email && x.username===oldName);
+  if(!u){ showLoginErr('No account on this workstation with that username is waiting to be linked.'); return; }
+  if(!(await checkPassword(u,pw))){ showLoginErr('Current password is wrong.'); return; }
+  if(!EMAIL_RE.test(email)){ showLoginErr('Enter a valid email address.'); return; }
+  if(userByEmail(email)){ showLoginErr('That email is already used by another account.'); return; }
+  if(!activeAdmins()){ u.role='admin'; u.active=1; }
+  u.email=email; u.username=email; u.failN=0; u.lockUntil=0;
+  writeLS(LS.users,USERS); log('users','Linked '+email+' to an old username account');
+  setLoginMode('signin'); $('#lgUser').value=email;
+  toast('Email linked. Sign in with '+esc(email)+'.','ok');
+}
+function wireLogin(){
+  $('#lgBtn').onclick=submitLogin;
+  $('#lgBack').onclick=()=>{ PENDING=null; setLoginMode('signin'); };
+  ['lgName','lgOldUser','lgUser','lgPass','lgNew','lgNew2'].forEach(id=>$('#'+id).addEventListener('keydown',e=>{ if(e.key==='Enter') $('#lgBtn').click(); }));
 }
 function wireGlobal(){
   $('#btnLogout').onclick=()=>confirmBox('Sign out?','Your queue and filters stay in this browser.',logout);
+  $('#btnPw').onclick=openChangePassword;
   $('#btnHelp').onclick=()=>modal({ title:'Keyboard shortcuts', body:'<div class="hb" style="cursor:default;grid-template-columns:120px 1fr"><span class="nm mono">/</span><span>Focus the search box</span></div>'
     + '<div class="hb" style="cursor:default;grid-template-columns:120px 1fr"><span class="nm mono">n</span><span>New spec (editors/admins)</span></div>'
     + '<div class="hb" style="cursor:default;grid-template-columns:120px 1fr"><span class="nm mono">p</span><span>Go to the label print queue</span></div>'
@@ -2308,6 +2520,7 @@ async function startApp(){
   }
   if(!window.__wired){ wireSpecs(); wireGlobal(); window.__wired=1; }   /* idempotent: never double-bind */
   renderSpecs(); renderDash(); renderStudio(); renderWa(); renderUsers(); renderLog(); renderSettings(); renderImportMapSafe();
+  if(!window.__expiry) window.__expiry=setInterval(()=>{ if(!resumeSession()){ toast('Your session ended. Sign in again.','warn'); setTimeout(()=>location.reload(),1500); } },60000);
   toast('Signed in as '+esc(SESS.name)+' · '+esc(ROLE_LABEL[SESS.role]),'ok');
 }
 function hydrateIcons(root){
@@ -2315,6 +2528,12 @@ function hydrateIcons(root){
 }
 function renderImportMapSafe(){ if(VIEW==='import'&&IMP.headers) renderImportMap(); }
 
+/* a saved session is restored only while its account is still valid */
+function resumeOrSignIn(){
+  if(resumeSession()){ startApp(); return; }
+  SESS=null; localStorage.removeItem(LS.sess);
+  setLoginMode(chooseLoginMode());
+}
 (async function init(){
   await bootData();
   hydrateIcons();
@@ -2323,8 +2542,7 @@ function renderImportMapSafe(){ if(VIEW==='import'&&IMP.headers) renderImportMap
   applyBrand();
   const bl=$('#brandLogo'); if(bl) bl.style.display = SET.logoHeader? '' : 'none';
   wireLogin();
-  if(SESS && userByUname(SESS.username)) { startApp(); }
-  else { SESS=null; $('#lgUser').focus(); }
+  resumeOrSignIn();
 })();
 
 </script>
