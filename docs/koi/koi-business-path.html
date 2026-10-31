@@ -1,0 +1,412 @@
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>KOI Business Path</title>
+<style>
+/* Layout: one column reading order — thesis, gate, options, math, timeline, offer, guardrails. */
+:root {
+  --bg: #F4F6F3;
+  --surface: #FFFFFF;
+  --fg: #17201C;
+  --muted: #5B6862;
+  --line: #D9E0DB;
+  --accent: #1E6B57;
+  --accent-soft: #DDEFE8;
+  --warn: #A8532B;
+  --warn-soft: #F7E6DC;
+  --serif: "Noto Serif Bengali", "Noto Serif", Georgia, serif;
+  --sans: "Hind Siliguri", "Noto Sans Bengali", "Segoe UI", system-ui, sans-serif;
+  --mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0F1613;
+    --surface: #17211D;
+    --fg: #E6EDE9;
+    --muted: #9AAAA2;
+    --line: #2A3832;
+    --accent: #6FC4A8;
+    --accent-soft: #1D3830;
+    --warn: #E39A6E;
+    --warn-soft: #3A2619;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0F1613;
+  --surface: #17211D;
+  --fg: #E6EDE9;
+  --muted: #9AAAA2;
+  --line: #2A3832;
+  --accent: #6FC4A8;
+  --accent-soft: #1D3830;
+  --warn: #E39A6E;
+  --warn-soft: #3A2619;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.7;
+}
+.page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-top: 28px;
+  padding-bottom: 56px;
+}
+h1, h2, h3 { font-family: var(--serif); font-weight: 700; line-height: 1.3; text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(28px, 6vw, 42px); letter-spacing: -0.01em; }
+h2 { font-size: clamp(22px, 4vw, 28px); margin-bottom: 14px; }
+h3 { font-size: 18px; margin-bottom: 6px; }
+p { margin: 0 0 12px; max-width: 65ch; }
+.eyebrow {
+  font-size: 13px; font-weight: 600; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--accent); margin-bottom: 10px;
+}
+.muted { color: var(--muted); }
+.note { font-size: 14px; color: var(--muted); }
+section { padding: 36px 0; border-top: 1px solid var(--line); }
+section:first-of-type { border-top: 0; }
+
+/* Hero */
+.hero { padding-bottom: 28px; }
+.hero .lede { font-size: 18px; color: var(--muted); max-width: 60ch; }
+.facts {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px; margin-top: 22px;
+}
+.fact { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
+.fact b { display: block; font-family: var(--mono); font-size: 20px; color: var(--fg); font-weight: 600; font-variant-numeric: tabular-nums; }
+.fact span { font-size: 13px; color: var(--muted); }
+
+/* Gate callout */
+.gate {
+  background: var(--warn-soft); border-left: 4px solid var(--warn);
+  border-radius: 8px; padding: 16px 18px; margin-top: 8px;
+}
+.gate h3 { color: var(--warn); }
+.gate ul { margin: 8px 0 0; padding-left: 20px; }
+.gate li { margin-bottom: 6px; }
+
+/* Options */
+.table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+table { width: 100%; border-collapse: collapse; min-width: 640px; font-size: 14px; }
+th, td { text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); font-weight: 600; }
+tr:last-child td { border-bottom: 0; }
+tr.pick td { background: var(--accent-soft); }
+tr.pick td:first-child { font-weight: 700; color: var(--accent); }
+.tag {
+  display: inline-block; font-size: 12px; font-weight: 600; padding: 2px 8px;
+  border-radius: 999px; border: 1px solid var(--line); color: var(--muted); white-space: nowrap;
+}
+.tag.go { border-color: var(--accent); color: var(--accent); }
+.tag.stop { border-color: var(--warn); color: var(--warn); }
+
+/* Income math */
+.math { display: grid; grid-template-columns: 1fr; gap: 18px; }
+@media (min-width: 720px) { .math { grid-template-columns: 1.1fr 0.9fr; align-items: start; } }
+.calc { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px; }
+.calc label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 4px; }
+.calc input {
+  width: 100%; font: inherit; font-family: var(--mono); font-size: 16px; color: var(--fg);
+  background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 9px 11px; margin-bottom: 14px;
+}
+.calc input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+.result { font-family: var(--mono); font-size: 28px; color: var(--accent); font-weight: 600; font-variant-numeric: tabular-nums; }
+.result-note { font-size: 13px; color: var(--muted); }
+
+/* Timeline — the order is the content: each step depends on the one before it */
+.timeline { list-style: none; margin: 0; padding: 0; position: relative; }
+.timeline li {
+  position: relative; padding: 0 0 22px 36px;
+}
+.timeline li::before {
+  content: ""; position: absolute; left: 7px; top: 8px; bottom: -4px; width: 2px; background: var(--line);
+}
+.timeline li:last-child::before { display: none; }
+.timeline li::after {
+  content: ""; position: absolute; left: 0; top: 4px; width: 16px; height: 16px; border-radius: 50%;
+  background: var(--bg); border: 2px solid var(--muted);
+}
+.timeline li.gate-step::after { background: var(--accent); border-color: var(--accent); }
+.when { font-family: var(--mono); font-size: 13px; color: var(--muted); }
+.gate-step h3 { color: var(--accent); }
+.timeline p { margin-bottom: 0; }
+
+/* Offer draft */
+.offer {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
+  padding: clamp(18px, 4vw, 28px);
+}
+.offer dl { display: grid; grid-template-columns: 1fr; gap: 14px; margin: 16px 0 0; }
+@media (min-width: 640px) { .offer dl { grid-template-columns: 180px 1fr; gap: 14px 20px; } }
+.offer dt { font-weight: 600; color: var(--accent); }
+.offer dd { margin: 0; }
+.offer ul { margin: 0; padding-left: 20px; }
+.offer li { margin-bottom: 4px; }
+.placeholder { font-family: var(--mono); font-size: 14px; background: var(--accent-soft); padding: 1px 6px; border-radius: 4px; }
+
+/* Guardrails */
+.guards { display: grid; grid-template-columns: 1fr; gap: 12px; }
+@media (min-width: 720px) { .guards { grid-template-columns: repeat(3, 1fr); } }
+.guard { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; }
+.guard h3 { font-size: 16px; font-family: var(--sans); font-weight: 700; }
+.guard ul { margin: 0; padding-left: 18px; font-size: 15px; }
+.guard li { margin-bottom: 4px; }
+
+/* Questions */
+.qs { margin: 0; padding-left: 22px; }
+.qs li { margin-bottom: 10px; max-width: 65ch; }
+
+footer { border-top: 1px solid var(--line); padding-top: 22px; font-size: 13px; color: var(--muted); }
+
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+
+<div class="page">
+
+<header class="hero">
+  <div class="eyebrow">KOI · ৯০ দিনের ব্যবসার পথ</div>
+  <h1>আগে সার্ভিস, প্রমাণের পর সফটওয়্যার</h1>
+  <p class="lede">আপনার ১৮+ বছরের textile অভিজ্ঞতা দিয়ে কম খরচে প্রথম নগদ আয় ও প্রমাণ আনুন। KOI-এর dashboard পরে সেই সার্ভিস থেকে তৈরি হবে, আগে নয়।</p>
+  <div class="facts">
+    <div class="fact"><b>৳5–10 লাখ</b><span>মোট capital; বেশির ভাগ অখরচ রাখুন</span></div>
+    <div class="fact"><b>৩–৪ ঘণ্টা</b><span>প্রতিদিন; চাকরির পাশাপাশি</span></div>
+    <div class="fact"><b>৯০ দিন</b><span>তিনটি gate-এ সিদ্ধান্ত</span></div>
+    <div class="fact"><b>২ লাখ+</b><span>মাসিক লক্ষ্য; ১২–২৪ মাসের গন্তব্য</span></div>
+  </div>
+</header>
+
+<section>
+  <h2>শুরুর আগের gate: চাকরি রক্ষা</h2>
+  <p>সবচেয়ে বড় ঝুঁকি market নয়, employer। একটি conflict-এ চাকরি যেতে পারে, আর চাকরিই এখন প্রধান নিয়মিত আয়।</p>
+  <div class="gate">
+    <h3>Gate 1 পার না হলে বাকি কোনো ধাপ শুরু হবে না</h3>
+    <ul>
+      <li>Employment contract, HR policy ও confidentiality ধারা পড়া: outside business, non-compete, IP।</li>
+      <li>"No-go list" লেখা: employer-এর customer, vendor, competitor, price ও কোনো confidential ফাইল।</li>
+      <li>দরকার হলে লিখিত clearance নেওয়া। Local employment বা IP lawyer-এর মতামত নিন; এটি আমার legal opinion নয়।</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <h2>বিকল্পগুলো পাশাপাশি</h2>
+  <p class="note">Capital, সময় ও conflict-এর ঝুঁকি আমার বিচারে। "প্রথম নগদ আয়ের সময়" একটি অনুমান, যাচাই করা হয়নি।</p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>বিকল্প</th><th>Capital</th><th>প্রথম নগদ আয় (অনুমান)</th><th>Expertise ব্যবহার</th><th>Conflict ঝুঁকি</th><th>সিদ্ধান্ত</th></tr>
+      </thead>
+      <tbody>
+        <tr class="pick">
+          <td>B. Production diagnostic (fixed-fee)</td>
+          <td>কম</td>
+          <td>কয়েক সপ্তাহ–মাস</td>
+          <td>সর্বোচ্চ</td>
+          <td>মাঝারি–বেশি</td>
+          <td><span class="tag go">প্রথমে, Gate 1 পরে</span></td>
+        </tr>
+        <tr>
+          <td>A. KOI software (SaaS)</td>
+          <td>বেশি (handoff-এর হিসাব ৳3.75–6.5 লাখ)</td>
+          <td>৬ মাসের বেশি</td>
+          <td>খুব বেশি</td>
+          <td>বেশি</td>
+          <td><span class="tag">পরে, প্রমাণের পর</span></td>
+        </tr>
+        <tr>
+          <td>C. Bangla training / content</td>
+          <td>খুব কম</td>
+          <td>ধীর</td>
+          <td>উঁচু</td>
+          <td>মাঝারি (employer-এর তথ্য বাদে)</td>
+          <td><span class="tag">দ্বিতীয় stream</span></td>
+        </tr>
+        <tr>
+          <td>D. Spare parts / yarn / fabric trading</td>
+          <td>মাঝারি–বেশি</td>
+          <td>মাঝারি</td>
+          <td>মাঝারি</td>
+          <td>বেশি (vendor overlap)</td>
+          <td><span class="tag stop">এখনই না</span></td>
+        </tr>
+        <tr>
+          <td>E. নিজের subcontract unit</td>
+          <td>সম্ভবত বাজেটের বাইরে</td>
+          <td>দীর্ঘ</td>
+          <td>উঁচু</td>
+          <td>বেশি</td>
+          <td><span class="tag stop">দিনে ৩–৪ ঘণ্টায় অবাস্তব</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <h2>লক্ষ্যের হিসাব</h2>
+  <p>৳২ লাখ বা ৳৫ লাখ/মাস পেতে কতজন client লাগবে, তা নির্ভর করে প্রতি client-এর মাসিক fee-র ওপর। নিচের fee-গুলো hypothesis, বাজার-তথ্য নয়।</p>
+  <div class="math">
+    <div class="table-wrap">
+      <table style="min-width:0">
+        <thead><tr><th>মাসিক fee / client</th><th>৳২ লাখে</th><th>৳৫ লাখে</th></tr></thead>
+        <tbody>
+          <tr><td>৳১৫,০০০</td><td>১৪ জন</td><td>৩৪ জন</td></tr>
+          <tr><td>৳৩০,০০০</td><td>৭ জন</td><td>১৭ জন</td></tr>
+          <tr><td>৳৫০,০০০</td><td>৪ জন</td><td>১০ জন</td></tr>
+          <tr><td>৳১,০০,০০০</td><td>২ জন</td><td>৫ জন</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="calc">
+      <label for="fee">আপনার ধরা মাসিক fee (৳)</label>
+      <input id="fee" type="number" inputmode="numeric" value="30000" min="1">
+      <label for="tgt">আপনার লক্ষ্য (৳/মাস)</label>
+      <input id="tgt" type="number" inputmode="numeric" value="500000" min="1">
+      <div class="result" id="out" aria-live="polite">১৭ জন client</div>
+      <div class="result-note">হিসাব: লক্ষ্য ÷ fee, ওপরে উঠিয়ে। এটি forecast নয়।</div>
+    </div>
+  </div>
+  <p style="margin-top:16px"><strong>পড়ার সূত্র:</strong> software-এর fee ৳১৫–৩০ হাজার/site ধরলে ৳৫ লাখে ১৭–৩৪টি site লাগে। একজন ৩–৪ ঘণ্টার founder-এর পক্ষে এত site-এর support সামলানো কঠিন। তাই লক্ষ্যে পৌঁছাতে high-ticket retainer বা partner লাগবে।</p>
+</section>
+
+<section>
+  <h2>৯০ দিনের ধাপ</h2>
+  <p class="note">প্রতিটি gate-এ সিদ্ধান্ত হবে প্রমাণ দেখে। ধাপ এগোবে শুধু তখন, যখন আগেরটি পার হয়েছে।</p>
+  <ol class="timeline" style="padding:0;margin:0;list-style:none">
+    <li class="gate-step">
+      <div class="when">সপ্তাহ ০–২</div>
+      <h3>Gate 1: Contract ও no-go list</h3>
+      <p>উপরের চেকলিস্ট শেষ করুন। Conflict স্পষ্ট হলে থেমে যান এবং knit-সংক্রান্ত কাজ স্থগিত রাখুন।</p>
+    </li>
+    <li>
+      <div class="when">সপ্তাহ ২–৬</div>
+      <h3>স্বাধীন network থেকে discovery</h3>
+      <p>Employer-এর সঙ্গে সম্পর্কহীন ৩–৫ জন factory বা ex-colleague-এর সঙ্গে কথা। ২টি factory-তে diagnostic proposal পাঠান। প্রয়োজনে KOI prototype শুধু synthetic demo হিসেবে দেখান।</p>
+    </li>
+    <li class="gate-step">
+      <div class="when">সপ্তাহ ৪–৮</div>
+      <h3>Gate 2: একজনও টাকা দিলে তবেই এগোন</h3>
+      <p>Verbal interest বিক্রি নয়। লিখিত scope ও টাকা না এলে পরবর্তী ধাপ শুরু হবে না।</p>
+    </li>
+    <li>
+      <div class="when">সপ্তাহ ৬–১০</div>
+      <h3>Diagnostic দিন ও findings কাঠামোবদ্ধ করুন</h3>
+      <p>প্রতি engagement-এ একই ফরম্যাট: loss, rejection, order balance, action। বারবার যা লাগে, তা থেকে Excel template ও KOI-র data model তৈরি হবে।</p>
+    </li>
+    <li class="gate-step">
+      <div class="when">সপ্তাহ ১০–১৩</div>
+      <h3>Gate 3: software build-এর সিদ্ধান্ত</h3>
+      <p>৩টি paid বা renewal, অথবা ২টি repeat request থাকলে KOI-এর build নিয়ে ভাবুন। না থাকলে pivot করুন, অথবা থামুন। এর আগে কোনো custom software খরচ নয়।</p>
+    </li>
+  </ol>
+</section>
+
+<section>
+  <h2>Diagnostic offer: খসড়া</h2>
+  <p class="note">এটি একটি draft। মূল্য ও scope প্রথম proposal-এর পর বদলাবে।</p>
+  <div class="offer">
+    <h3>প্রোডাকশন ও ডেলিভারি ডায়াগনস্টিক</h3>
+    <p class="muted">এক knit বা composite unit-এর শেষ ৪ সপ্তাহের তথ্য দেখে কোথায় সময়, কাপড় ও delivery হারাচ্ছে, তার উত্তর।</p>
+    <dl>
+      <dt>কাদের জন্য</dt>
+      <dd>Knit বা composite unit-এর production / planning / QC দায়িত্বে থাকা মানুষ</dd>
+      <dt>আপনার কাছ থেকে যা লাগবে</dt>
+      <dd>শেষ ৪ সপ্তাহের shift, machine, downtime, QC ও order তথ্য (Excel, খাতা বা ছবি যা আছে)</dd>
+      <dt>আমাদের দেওয়া</dt>
+      <dd>
+        <ul>
+          <li>Top ৫টি loss area: downtime, rejection, order balance risk</li>
+          <li>Order-wise delivery risk তালিকা, যার সঙ্গে কারণ ও প্রস্তাবিত action</li>
+          <li>৩০ দিনের action plan ও এক সপ্তাহ পরের review call</li>
+        </ul>
+      </dd>
+      <dt>সময়কাল</dt>
+      <dd>১–২ সপ্তাহ</dd>
+      <dt>মূল্য</dt>
+      <dd><span class="placeholder">পরীক্ষা করতে হবে</span> আমার hypothesis: ৳২৫–৫০ হাজার। Proposal-এ প্রথম ২–৩ জনের কাছে যাচাই করুন।</dd>
+      <dt>বাদ থাকবে</dt>
+      <dd>Software বানানো, ERP/PLC integration, employer-এর কোনো তথ্য বা contact</dd>
+      <dt>তথ্যের নিয়ম</dt>
+      <dd>তথ্য শুধু এই engagement-এর জন্য। শেষে ফেরত বা delete, এবং অন্য কারও সঙ্গে শেয়ার নয়। Buyer ও order ID-র নাম pseudonymous রাখা যাবে।</dd>
+    </dl>
+  </div>
+</section>
+
+<section>
+  <h2>Guardrails</h2>
+  <div class="guards">
+    <div class="guard">
+      <h3>এখন করবেন</h3>
+      <ul>
+        <li>Contract পড়া ও clearance</li>
+        <li>স্বাধীন ১০+ contact-এর তালিকা</li>
+        <li>Diagnostic দিয়ে টাকার প্রমাণ</li>
+        <li>প্রতিটি engagement-এর findings লিখে রাখা</li>
+      </ul>
+    </div>
+    <div class="guard">
+      <h3>এখন করবেন না</h3>
+      <ul>
+        <li>Employer-এর কোনো file, তথ্য বা contact ব্যবহার</li>
+        <li>Paid প্রমাণের আগে software build</li>
+        <li>৫–১০ লাখ একবারে খরচ</li>
+        <li>Employer-এর brand বা title দিয়ে endorsement</li>
+      </ul>
+    </div>
+    <div class="guard">
+      <h3>মত বদলাবে যখন</h3>
+      <ul>
+        <li>Contract outside business নিষেধ করে: knit-সংক্রান্ত কাজ বন্ধ</li>
+        <li>১০+ decision-maker নিশ্চিত করেন pain ও কেনার ইচ্ছা: KOI pilot এগিয়ে আনুন</li>
+        <li>Tech বা sales partner পেলে: software আগে সম্ভব</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>আমার যা জানা দরকার</h2>
+  <ol class="qs">
+    <li>Employment contract-এ outside business, non-compete ও confidentiality কী লেখা? এটি সবচেয়ে বড় variable।</li>
+    <li>অভিজ্ঞতা ১৮ না ২০+ বছর? আর সবচেয়ে শক্তিশালী area: production planning, machine/technical, quality, costing/buying, নাকি people management?</li>
+    <li>Employer-এর সঙ্গে সম্পর্কহীন কতজন মানুষ সত্যিকারের কথা বলবেন বলে মনে হয়? ৫ জনের কম হলে ধীরে এগোতে হবে।</li>
+    <li>চাকরি ছাড়া কত মাস নিজের খরচ চলবে? ৳৫–১০ লাখের কতটা হারাতে পারবেন?</li>
+    <li>Excel বা Google Sheets নিজে চালাতে পারেন? না হলে diagnostic-এর ফরম্যাট সহজ রাখতে হবে।</li>
+  </ol>
+</section>
+
+<footer>
+  সব সংখ্যা ও মূল্য hypothesis। Bangladesh-এর market data, VAT/tax ও employment law এই পাতায় যাচাই করা হয়নি। এগুলো লেখার আগে স্থানীয় বিশেষজ্ঞ বা সংশ্লিষ্ট উৎসে যাচাই করুন।
+</footer>
+
+</div>
+
+<script>
+(function () {
+  var fee = document.getElementById('fee');
+  var tgt = document.getElementById('tgt');
+  var out = document.getElementById('out');
+  function toBn(n) {
+    return String(n).replace(/[0-9]/g, function (d) { return '০১২৩৪৫৬৭৮৯'[d]; });
+  }
+  function calc() {
+    var f = parseFloat(fee.value);
+    var t = parseFloat(tgt.value);
+    if (!(f > 0) || !(t > 0)) { out.textContent = '—'; return; }
+    out.textContent = toBn(Math.ceil(t / f)) + ' জন client';
+  }
+  fee.addEventListener('input', calc);
+  tgt.addEventListener('input', calc);
+  calc();
+})();
+</script>
